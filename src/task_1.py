@@ -32,7 +32,3 @@ class TableParser:
 @dataclass
 class DataTable:
     table: list
-
-
-dt = DataTable(TableParser.get_table())
-print(dt.table)
