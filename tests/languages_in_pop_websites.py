@@ -1,10 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
+from dataclasses import dataclass
+import re
 
 
 class TableParser:
     @staticmethod
-    def get_table():
+    def get_table() -> list:
         wiki_url = 'https://en.wikipedia.org/wiki/Programming_languages_used_in_most_popular_websites'
         wiki_page = requests.get(wiki_url)
         wiki_bs = BeautifulSoup(wiki_page.text, 'html.parser')
@@ -15,11 +17,22 @@ class TableParser:
             row_data = row.text.split('\n\n')
             if len(row_data) != 6:
                 break
+
             row_data[0] = row_data[0].lstrip('\n')
             row_data[-1] = row_data[-1].rstrip('\n')
+
+            row_data[1] = int(re.search(r'\d+(?:\.\d\d\d|,\d\d\d)*', row_data[1])[0]
+                              .replace('.', '')
+                              .replace(',', ''))
             table.append(row_data)
 
         return table
 
 
-# print(*TableParser.get_table(), sep='\n')
+@dataclass
+class DataTable:
+    table: list
+
+
+dt = DataTable(TableParser.get_table())
+print(dt.table)
