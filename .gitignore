@@ -1,2 +1,3 @@
 .ider/
 .idea/
+*/__pycache__

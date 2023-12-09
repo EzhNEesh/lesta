@@ -1,6 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import re
 
 
@@ -31,4 +31,4 @@ class TableParser:
 
 @dataclass
 class DataTable:
-    table: list
+    table: list = field(default_factory=lambda: TableParser.get_table())
