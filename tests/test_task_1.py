@@ -23,6 +23,6 @@ def test_data_table(threshold: int):
 #         for row in DataTable().table
 #     ]
 # )
-# def test_data_table(threshold: int, row):
+# def test_data_table(threshold: int, row: list):
 #     assert row[1] > threshold, (f'{row[0]} (Frontend:{row[2]}|Backend:{row[3]}) has {row[1]} unique visitors per '
 #                                 f'month. (Expected more than {threshold})')
