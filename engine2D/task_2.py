@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from collections import deque
 
 
 @dataclass
@@ -42,9 +43,13 @@ class Rectangle(Primitive):
 
 @dataclass
 class Engine2D:
-    canvas: list[Primitive] = field(default_factory=lambda: [])
+    canvas: deque[Primitive] = field(default_factory=lambda: deque())
     pepe: int = None
 
     def add_figure(self, primitive: Primitive):
-        print(type(primitive))
         self.canvas.append(primitive)
+
+    def draw(self):
+        while len(self.canvas):
+            primitive = self.canvas.popleft()
+            primitive.draw()
