@@ -3,8 +3,19 @@ from collections import deque
 
 
 @dataclass
-class ValueLimiter:
-    def __init__(self, value=0):
+class Color:
+    def __init__(
+            self,
+            red: int = 0,
+            green: int = 0,
+            blue: int = 0,
+    ):
+        self.red = red
+        self.green = green
+        self.blue = blue
+
+    @staticmethod
+    def is_valid_color(value):
         if not 0 <= value <= 255:
             raise ValueError(f'The color must be represented '
                              f'by an integers between 0 and 255: {value}')
@@ -12,32 +23,44 @@ class ValueLimiter:
             raise TypeError(f'The color must be represented '
                             f'by an integers between 0 and 255: {value}')
 
-        self.value = value
+    @property
+    def red(self):
+        return self._red
 
+    @red.setter
+    def red(self, red):
+        self.is_valid_color(red)
+        self._red = red
 
-@dataclass
-class Color:
-    def __init__(self,
-                 red: int = 0,
-                 green: int = 0,
-                 blue: int = 0
-                 ):
-        self.__red = ValueLimiter(red)
-        self.__green = ValueLimiter(green)
-        self.__blue = ValueLimiter(blue)
+    @property
+    def green(self):
+        return self._green
 
-    @staticmethod
-    def __int_to_hex(num):
-        ValueLimiter(num)
+    @green.setter
+    def green(self, green):
+        self.is_valid_color(green)
+        self._green = green
+
+    @property
+    def blue(self):
+        return self._blue
+
+    @blue.setter
+    def blue(self, blue):
+        self.is_valid_color(blue)
+        self._blue = blue
+
+    def __int_to_hex(self, num):
+        self.is_valid_color(num)
         return '0' + hex(num)[-1] if num < 16 else hex(num)[-2:]
 
     def get_rgb_set(self):
-        return self.__red.value, self.__green.value, self.__blue.value
+        return self._red, self._green, self._blue
 
     def get_hex_represent(self):
-        return f'#{self.__int_to_hex(self.__red.value)[-2:].upper()}'\
-               f'{self.__int_to_hex(self.__green.value)[-2:].upper()}'\
-               f'{self.__int_to_hex(self.__blue.value)[-2:].upper()}'
+        return f'#{self.__int_to_hex(self._red)[-2:].upper()}'\
+               f'{self.__int_to_hex(self._green)[-2:].upper()}'\
+               f'{self.__int_to_hex(self._blue)[-2:].upper()}'
 
 
 @dataclass
