@@ -42,8 +42,24 @@ class Color:
 
 @dataclass
 class Point:
-    x: float = 0.0
-    y: float = 0.0
+    _x: float = 0.0
+    _y: float = 0.0
+
+    @property
+    def x(self):
+        return self._x
+
+    @x.setter
+    def x(self, value):
+        self._x = float(value)
+
+    @property
+    def y(self):
+        return self._x
+
+    @y.setter
+    def y(self, value):
+        self._x = float(value)
 
 
 class Primitive:
