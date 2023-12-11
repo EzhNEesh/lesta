@@ -65,8 +65,9 @@ class Color:
 
 @dataclass
 class Point:
-    _x: float = 0.0
-    _y: float = 0.0
+    def __init__(self, x: float = 0.0, y: float = 0.0):
+        self.x = x
+        self.y = y
 
     @property
     def x(self):
@@ -78,11 +79,11 @@ class Point:
 
     @property
     def y(self):
-        return self._x
+        return self._y
 
     @y.setter
     def y(self, value):
-        self._x = float(value)
+        self._y = float(value)
 
 
 class Primitive:
