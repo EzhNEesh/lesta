@@ -93,8 +93,28 @@ class Primitive:
 
 @dataclass
 class Circle(Primitive):
-    center: Point = Point(15.0, 15.0)
-    radius: float = 5.0
+    def __init__(self, center: Point = Point(15.0, 15.0), radius: float = 5.0):
+        self.center = center
+        self.radius = radius
+
+    @property
+    def center(self):
+        return self._center
+
+    @center.setter
+    def center(self, new_center):
+        if not isinstance(new_center, Point):
+            print('meow')
+            raise TypeError(f'Circle center must be Point(): {type(new_center)}')
+        self._center = new_center
+
+    @property
+    def radius(self):
+        return self._radius
+
+    @radius.setter
+    def radius(self, new_radius):
+        self._radius = float(new_radius)
 
     def draw(self, color: Color = Color()):
         print(f'Drawing Circle({color.get_hex_represent()}): '
