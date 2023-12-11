@@ -76,7 +76,32 @@ class TestPoint:
             (1, 'a', pytest.raises(ValueError))
         ]
     )
-    def test_point(self, x, y, expectation):
+    def test_point_not_empty(self, x, y, expectation):
         with expectation:
             point = Point(x, y)
             assert (point.x, point.y) == (float(x), float(y))
+
+
+def test_circle_empty():
+    circle = Circle()
+    assert (circle.center, circle.radius) == (Point(15, 15), 5.)
+    circle = Circle(center=Point(1, 1))
+    assert (circle.center, circle.radius) == (Point(1, 1), 5.)
+    circle = Circle(radius=10)
+    assert (circle.center, circle.radius) == (Point(15., 15.), 10.)
+
+
+@pytest.mark.parametrize(
+    ('center', 'radius', 'expectation'),
+    [
+        (Point(1, 1), 1, does_not_raise()),
+        (Point(1, 1), '1', does_not_raise()),
+        (None, 1, pytest.raises(TypeError)),
+        (Point(1, 1), None, pytest.raises(TypeError))
+    ]
+)
+def test_circe_not_empty(center, radius, expectation):
+    with expectation:
+        circle = Circle(center, radius)
+        assert circle.center == center
+        assert circle.radius == float(radius)
