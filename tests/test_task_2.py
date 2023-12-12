@@ -82,68 +82,98 @@ class TestPoint:
             assert (point.x, point.y) == (float(x), float(y))
 
 
-def test_circle_empty():
-    circle = Circle()
-    assert (circle.center, circle.radius) == (Point(15, 15), 5.)
-    circle = Circle(center=Point(1, 1))
-    assert (circle.center.get_coordinates(), circle.radius) == ((1., 1.), 5.)
-    circle = Circle(radius=10)
-    assert (circle.center.get_coordinates(), circle.radius) == ((15., 15.), 10.)
+class TestPrimitives:
+    def test_circle_empty(self):
+        circle = Circle()
+        assert (circle.center, circle.radius) == (Point(15, 15), 5.)
+        circle = Circle(center=Point(1, 1))
+        assert (circle.center.get_coordinates(), circle.radius) == ((1., 1.), 5.)
+        circle = Circle(radius=10)
+        assert (circle.center.get_coordinates(), circle.radius) == ((15., 15.), 10.)
 
-
-@pytest.mark.parametrize(
-    ('center', 'radius', 'expectation'),
-    [
-        (Point(1, 1), 1, does_not_raise()),
-        (Point(1, 1), '1', does_not_raise()),
-        (None, 1, pytest.raises(TypeError)),
-        (Point(1, 1), None, pytest.raises(TypeError))
-    ]
-)
-def test_circe_not_empty(center, radius, expectation):
-    with expectation:
-        circle = Circle(center, radius)
-        assert (circle.center.get_coordinates()) == (center.get_coordinates())
-        assert circle.radius == float(radius)
-
-
-def test_triangle_empty():
-    triangle = Triangle()
-    assert (
-            (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
-            ((5.0, 5.0), (10.0, 10.0), (5.0, 10.0))
+    @pytest.mark.parametrize(
+        ('center', 'radius', 'expectation'),
+        [
+            (Point(1, 1), 1, does_not_raise()),
+            (Point(1, 1), '1', does_not_raise()),
+            (None, 1, pytest.raises(TypeError)),
+            (Point(1, 1), None, pytest.raises(TypeError))
+        ]
     )
-    triangle = Triangle(a=Point(20.5, 20.5))
-    assert (
-            (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
-            ((20.5, 20.5), (10.0, 10.0), (5.0, 10.0))
-    )
-    triangle = Triangle(b=Point(20.5, 20.5))
-    assert (
-            (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
-            ((5., 5.), (20.5, 20.5), (5.0, 10.0))
-    )
-    triangle = Triangle(c=Point(20.5, 20.5))
-    assert (
-            (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
-            ((5., 5.), (10., 10.), (20.5, 20.5))
-    )
+    def test_circe_not_empty(self, center, radius, expectation):
+        with expectation:
+            circle = Circle(center, radius)
+            assert (circle.center.get_coordinates()) == (center.get_coordinates())
+            assert circle.radius == float(radius)
 
-
-@pytest.mark.parametrize(
-    'a, b, c, expectation',
-    [
-        (Point(1, 1), Point(2, 2), Point(2, 1), does_not_raise()),
-        (None, Point(2, 2), Point(2, 1), pytest.raises(TypeError)),
-        (Point(2, 2), None, Point(2, 1), pytest.raises(TypeError)),
-        (Point(2, 2), Point(2, 1), None, pytest.raises(TypeError)),
-
-    ]
-)
-def test_triangle_not_empty(a, b, c, expectation):
-    with expectation:
-        triangle = Triangle(a, b, c)
+    def test_triangle_empty(self):
+        triangle = Triangle()
         assert (
                 (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
-                (a.get_coordinates(), b.get_coordinates(), c.get_coordinates())
+                ((5.0, 5.0), (10.0, 10.0), (5.0, 10.0))
         )
+        triangle = Triangle(a=Point(20.5, 20.5))
+        assert (
+                (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
+                ((20.5, 20.5), (10.0, 10.0), (5.0, 10.0))
+        )
+        triangle = Triangle(b=Point(20.5, 20.5))
+        assert (
+                (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
+                ((5., 5.), (20.5, 20.5), (5.0, 10.0))
+        )
+        triangle = Triangle(c=Point(20.5, 20.5))
+        assert (
+                (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
+                ((5., 5.), (10., 10.), (20.5, 20.5))
+        )
+
+    @pytest.mark.parametrize(
+        'a, b, c, expectation',
+        [
+            (Point(1, 1), Point(2, 2), Point(2, 1), does_not_raise()),
+            (None, Point(2, 2), Point(2, 1), pytest.raises(TypeError)),
+            (Point(2, 2), None, Point(2, 1), pytest.raises(TypeError)),
+            (Point(2, 2), Point(2, 1), None, pytest.raises(TypeError))
+        ]
+    )
+    def test_triangle_not_empty(self, a, b, c, expectation):
+        with expectation:
+            triangle = Triangle(a, b, c)
+            assert (
+                    (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
+                    (a.get_coordinates(), b.get_coordinates(), c.get_coordinates())
+            )
+
+    def test_rectangle_empty(self):
+        rectangle = Rectangle()
+        assert (
+                (rectangle.a.get_coordinates(), rectangle.b.get_coordinates()) ==
+                ((20.0, 20.0), (30.0, 30.0))
+        )
+        rectangle = Rectangle(a=Point(10.5, 10.5))
+        assert (
+                (rectangle.a.get_coordinates(), rectangle.b.get_coordinates()) ==
+                ((10.5, 10.5), (30.0, 30.0))
+        )
+        rectangle = Rectangle(b=Point(40.5, 40.5))
+        assert (
+                (rectangle.a.get_coordinates(), rectangle.b.get_coordinates()) ==
+                ((20., 20.), (40.5, 40.5))
+        )
+
+    @pytest.mark.parametrize(
+        'a, b, expectation',
+        [
+            (Point(10, 10), Point(20, 20), does_not_raise()),
+            (None, Point(20, 20), pytest.raises(TypeError)),
+            (Point(20, 20), None, pytest.raises(TypeError)),
+        ]
+    )
+    def test_rectangle_not_empty(self, a, b, expectation):
+        with expectation:
+            rectangle = Rectangle(a, b)
+            assert (
+                    (rectangle.a.get_coordinates(), rectangle.b.get_coordinates()) ==
+                    (a.get_coordinates(), b.get_coordinates())
+            )
