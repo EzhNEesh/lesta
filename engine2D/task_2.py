@@ -1,8 +1,6 @@
-from dataclasses import dataclass, field
 from collections import deque
 
 
-@dataclass
 class Color:
     def __init__(
             self,
@@ -63,7 +61,6 @@ class Color:
                f'{self.__int_to_hex(self._blue)[-2:].upper()}'
 
 
-@dataclass
 class Point:
     def __init__(self, x: float = 0.0, y: float = 0.0):
         self.x = x
@@ -94,7 +91,6 @@ class Primitive:
         pass
 
 
-@dataclass
 class Circle(Primitive):
     def __init__(self, center: Point = Point(15.0, 15.0), radius: float = 5.0):
         self.center = center
@@ -107,7 +103,6 @@ class Circle(Primitive):
     @center.setter
     def center(self, new_center):
         if not isinstance(new_center, Point):
-            print('meow')
             raise TypeError(f'Circle center must be Point(): {type(new_center)}')
         self._center = new_center
 
@@ -124,7 +119,6 @@ class Circle(Primitive):
               f'{self.center.get_coordinates()} with radius {self.radius}')
 
 
-@dataclass
 class Triangle(Primitive):
     def __init__(self,
                  a: Point = Point(5.0, 5.0),
@@ -170,7 +164,6 @@ class Triangle(Primitive):
               f'with points {self.a.get_coordinates()}, {self.b.get_coordinates()}, {self.c.get_coordinates()}')
 
 
-@dataclass
 class Rectangle(Primitive):
     def __init__(self, a: Point = Point(20.0, 20.0), b: Point = Point(30.0, 30.0)):
         self.a = a
@@ -201,18 +194,26 @@ class Rectangle(Primitive):
               f'with corner points {self.a.get_coordinates()} and {self.b.get_coordinates()}')
 
 
-@dataclass
 class Engine2D:
-    canvas: deque[(Primitive, Color)] = field(default_factory=lambda: deque())
-    current_color = Color()
+    def __init__(self):
+        self.__canvas = deque()
+        self.__current_color = Color()
+
+    @property
+    def canvas(self):
+        return self.__canvas.copy()
 
     def add_figure(self, primitive: Primitive):
-        self.canvas.append((primitive, self.current_color))
+        if not isinstance(primitive, Primitive):
+            raise TypeError(f'A new figure must be Primitive: {type(primitive)}')
+        self.__canvas.append((primitive, self.__current_color))
 
     def draw(self):
-        while len(self.canvas):
-            primitive = self.canvas.popleft()
+        while len(self.__canvas):
+            primitive = self.__canvas.popleft()
             primitive[0].draw(primitive[1])
 
     def change_color(self, new_color: Color = Color(0, 0, 0)):
-        self.current_color = new_color
+        if not isinstance(new_color, Color):
+            raise TypeError(f'A new color must be Color: {type(new_color)}')
+        self.__current_color = new_color
