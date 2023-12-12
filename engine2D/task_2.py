@@ -172,8 +172,29 @@ class Triangle(Primitive):
 
 @dataclass
 class Rectangle(Primitive):
-    a: Point = Point(20.0, 20.0)
-    b: Point = Point(30.0, 30.0)
+    def __init__(self, a: Point = Point(20.0, 20.0), b: Point = Point(30.0, 30.0)):
+        self.a = a
+        self.b = b
+
+    @property
+    def a(self):
+        return self._a
+
+    @a.setter
+    def a(self, new_a):
+        if not isinstance(new_a, Point):
+            raise TypeError(f'New point must be Point: {type(new_a)}')
+        self._a = new_a
+
+    @property
+    def b(self):
+        return self._b
+
+    @b.setter
+    def b(self, new_b):
+        if not isinstance(new_b, Point):
+            raise TypeError(f'New point must be Point: {type(new_b)}')
+        self._b = new_b
 
     def draw(self, color: Color = Color()):
         print(f'Drawing Rectangle({color.get_hex_represent()}) '
