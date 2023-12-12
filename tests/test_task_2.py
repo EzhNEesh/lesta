@@ -85,7 +85,7 @@ class TestPoint:
 class TestPrimitives:
     def test_circle_empty(self):
         circle = Circle()
-        assert (circle.center, circle.radius) == (Point(15, 15), 5.)
+        assert (circle.center.get_coordinates(), circle.radius) == ((15, 15), 5.)
         circle = Circle(center=Point(1, 1))
         assert (circle.center.get_coordinates(), circle.radius) == ((1., 1.), 5.)
         circle = Circle(radius=10)
@@ -177,3 +177,40 @@ class TestPrimitives:
                     (rectangle.a.get_coordinates(), rectangle.b.get_coordinates()) ==
                     (a.get_coordinates(), b.get_coordinates())
             )
+
+
+class TestEngine2D:
+    def test_init(self):
+        engine = Engine2D()
+        assert isinstance(engine.canvas, deque)
+
+    @pytest.mark.parametrize(
+        'primitives_list, expectation',
+        [
+            ([Circle()], does_not_raise()),
+            ([Triangle()], does_not_raise()),
+            ([Rectangle()], does_not_raise()),
+            ([
+                Circle(),
+                Triangle(),
+                Rectangle(),
+                Circle(Point(10, 20), 10),
+                Triangle(Point(8, 8), Point(30, 30), Point(3, 25)),
+                Rectangle(Point(30, 5), Point(10, 70))
+            ], does_not_raise()),
+            ([None], pytest.raises(TypeError))
+        ]
+    )
+    def test_add_figure(self, primitives_list, expectation):
+        engine = Engine2D()
+        with expectation:
+            for primitive in primitives_list:
+                engine.add_figure(primitive)
+        for i, primitive in enumerate(engine.canvas):
+            assert primitive[0] is primitives_list[i], f'primitives_list[{i}] is not equal'
+
+    def test_change_color(self):
+        engine = Engine2D()
+        engine.change_color(Color(255, 255, 255))
+        engine.add_figure(Circle())
+        assert engine.canvas[0][1].get_rgb_set() == (255, 255, 255)
