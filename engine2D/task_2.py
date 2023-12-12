@@ -85,6 +85,9 @@ class Point:
     def y(self, value):
         self._y = float(value)
 
+    def get_coordinates(self):
+        return self.x, self.y
+
 
 class Primitive:
     def draw(self, color: Color = Color()):
@@ -123,9 +126,44 @@ class Circle(Primitive):
 
 @dataclass
 class Triangle(Primitive):
-    a: Point = Point(5.0, 5.0)
-    b: Point = Point(10.0, 10.0)
-    c: Point = Point(5.0, 10.0)
+    def __init__(self,
+                 a: Point = Point(5.0, 5.0),
+                 b: Point = Point(10.0, 10.0),
+                 c: Point = Point(5.0, 10.0)
+                 ):
+        self.a = a
+        self.b = b
+        self.c = c
+
+    @property
+    def a(self):
+        return self._a
+
+    @a.setter
+    def a(self, new_a):
+        if not isinstance(new_a, Point):
+            raise TypeError(f'New point must be Point: {type(new_a)}')
+        self._a = new_a
+
+    @property
+    def b(self):
+        return self._b
+
+    @b.setter
+    def b(self, new_b):
+        if not isinstance(new_b, Point):
+            raise TypeError(f'New point must be Point: {type(new_b)}')
+        self._b = new_b
+
+    @property
+    def c(self):
+        return self._c
+
+    @c.setter
+    def c(self, new_c):
+        if not isinstance(new_c, Point):
+            raise TypeError(f'New point must be Point: {type(new_c)}')
+        self._c = new_c
 
     def draw(self, color: Color = Color()):
         print(f'Drawing Triangle({color.get_hex_represent()}) '
