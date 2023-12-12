@@ -105,3 +105,45 @@ def test_circe_not_empty(center, radius, expectation):
         circle = Circle(center, radius)
         assert (circle.center.get_coordinates()) == (center.get_coordinates())
         assert circle.radius == float(radius)
+
+
+def test_triangle_empty():
+    triangle = Triangle()
+    assert (
+            (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
+            ((5.0, 5.0), (10.0, 10.0), (5.0, 10.0))
+    )
+    triangle = Triangle(a=Point(20.5, 20.5))
+    assert (
+            (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
+            ((20.5, 20.5), (10.0, 10.0), (5.0, 10.0))
+    )
+    triangle = Triangle(b=Point(20.5, 20.5))
+    assert (
+            (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
+            ((5., 5.), (20.5, 20.5), (5.0, 10.0))
+    )
+    triangle = Triangle(c=Point(20.5, 20.5))
+    assert (
+            (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
+            ((5., 5.), (10., 10.), (20.5, 20.5))
+    )
+
+
+@pytest.mark.parametrize(
+    'a, b, c, expectation',
+    [
+        (Point(1, 1), Point(2, 2), Point(2, 1), does_not_raise()),
+        (None, Point(2, 2), Point(2, 1), pytest.raises(TypeError)),
+        (Point(2, 2), None, Point(2, 1), pytest.raises(TypeError)),
+        (Point(2, 2), Point(2, 1), None, pytest.raises(TypeError)),
+
+    ]
+)
+def test_triangle_not_empty(a, b, c, expectation):
+    with expectation:
+        triangle = Triangle(a, b, c)
+        assert (
+                (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
+                (a.get_coordinates(), b.get_coordinates(), c.get_coordinates())
+        )
