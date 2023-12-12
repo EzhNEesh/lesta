@@ -121,7 +121,7 @@ class Circle(Primitive):
 
     def draw(self, color: Color = Color()):
         print(f'Drawing Circle({color.get_hex_represent()}): '
-              f'{self.center.x, self.center.y} with radius {self.radius}')
+              f'{self.center.get_coordinates()} with radius {self.radius}')
 
 
 @dataclass
@@ -167,7 +167,7 @@ class Triangle(Primitive):
 
     def draw(self, color: Color = Color()):
         print(f'Drawing Triangle({color.get_hex_represent()}) '
-              f'with points {self.a.x, self.a.y}, {self.b.x, self.b.y}, {self.c.x, self.c.y}')
+              f'with points {self.a.get_coordinates()}, {self.b.get_coordinates()}, {self.c.get_coordinates()}')
 
 
 @dataclass
@@ -177,7 +177,7 @@ class Rectangle(Primitive):
 
     def draw(self, color: Color = Color()):
         print(f'Drawing Rectangle({color.get_hex_represent()}) '
-              f'with corner points {self.a.x, self.a.y} and {self.b.x, self.b.y}')
+              f'with corner points {self.a.get_coordinates()} and {self.b.get_coordinates()}')
 
 
 @dataclass
