@@ -86,9 +86,9 @@ def test_circle_empty():
     circle = Circle()
     assert (circle.center, circle.radius) == (Point(15, 15), 5.)
     circle = Circle(center=Point(1, 1))
-    assert (circle.center.x, circle.center.y, circle.radius) == (1., 1., 5.)
+    assert (circle.center.get_coordinates(), circle.radius) == ((1., 1.), 5.)
     circle = Circle(radius=10)
-    assert (circle.center.x, circle.center.y, circle.radius) == (15., 15., 10.)
+    assert (circle.center.get_coordinates(), circle.radius) == ((15., 15.), 10.)
 
 
 @pytest.mark.parametrize(
@@ -103,5 +103,5 @@ def test_circle_empty():
 def test_circe_not_empty(center, radius, expectation):
     with expectation:
         circle = Circle(center, radius)
-        assert (circle.center.x, circle.center.y) == (center.x, center.y)
+        assert (circle.center.get_coordinates()) == (center.get_coordinates())
         assert circle.radius == float(radius)
