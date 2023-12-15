@@ -192,6 +192,12 @@ class TestPrimitives:
                     (a.get_coordinates(), b.get_coordinates())
             )
 
+    def test_rectangle_draw(self, capfd):
+        rectangle = Rectangle(Point(10, 10), Point(20, 20))
+        color = Color(100, 200, 0)
+        rectangle.draw(color)
+        out, err = capfd.readouterr()
+        assert out == 'Drawing Rectangle(#64C800) with corner points (10.0, 10.0) and (20.0, 20.0)\n'
 
 class TestEngine2D:
     def test_init(self):
