@@ -199,6 +199,7 @@ class TestPrimitives:
         out, err = capfd.readouterr()
         assert out == 'Drawing Rectangle(#64C800) with corner points (10.0, 10.0) and (20.0, 20.0)\n'
 
+
 class TestEngine2D:
     def test_init(self):
         engine = Engine2D()
@@ -234,3 +235,20 @@ class TestEngine2D:
         engine.change_color(Color(255, 255, 255))
         engine.add_figure(Circle())
         assert engine.canvas[0][1].get_rgb_set() == (255, 255, 255)
+
+    def test_engine_draw(self, capfd):
+        engine = Engine2D()
+        engine.add_figure(Circle())
+
+        engine.change_color(Color(150, 150, 150))
+        engine.add_figure(Triangle())
+
+        engine.change_color(Color(255, 255, 255))
+        engine.add_figure(Rectangle())
+
+        engine.draw()
+        out, err = capfd.readouterr()
+        output_expect = ('Drawing Circle(#000000): (15.0, 15.0) with radius 5.0\n' +
+                         'Drawing Triangle(#969696) with points (5.0, 5.0), (10.0, 10.0), (5.0, 10.0)\n' +
+                         'Drawing Rectangle(#FFFFFF) with corner points (20.0, 20.0) and (30.0, 30.0)\n')
+        assert out == output_expect
