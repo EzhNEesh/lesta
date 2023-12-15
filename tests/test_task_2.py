@@ -96,7 +96,9 @@ class TestPrimitives:
         ('center', 'radius', 'expectation'),
         [
             (Point(1, 1), 1, does_not_raise()),
-            (Point(1, 1), '1', does_not_raise()),
+            (Point(1, 1), -1, pytest.raises(ValueError)),
+            (Point(1, 1), 1.1, pytest.raises(TypeError)),
+            (Point(1, 1), '1', pytest.raises(TypeError)),
             (None, 1, pytest.raises(TypeError)),
             (Point(1, 1), None, pytest.raises(TypeError))
         ]
