@@ -62,7 +62,7 @@ class Color:
 
 
 class Point:
-    def __init__(self, x: float = 0.0, y: float = 0.0):
+    def __init__(self, x: int = 0, y: int = 0):
         self.x = x
         self.y = y
 
@@ -72,7 +72,12 @@ class Point:
 
     @x.setter
     def x(self, value):
-        self._x = float(value)
+        if not isinstance(value, int):
+            raise TypeError(f'A point\'s coordinates must be integer: {type(value)}')
+        value = int(value)
+        if value < 0:
+            raise ValueError(f'A point\'s coordinates must be greater than or equal to zero: x = {value}')
+        self._x = value
 
     @property
     def y(self):
@@ -80,7 +85,12 @@ class Point:
 
     @y.setter
     def y(self, value):
-        self._y = float(value)
+        if not isinstance(value, int):
+            raise TypeError(f'A point\'s coordinates must be integer: {type(value)}')
+        value = int(value)
+        if value < 0:
+            raise ValueError(f'A point\'s coordinates must be greater than or equal to zero: x = {value}')
+        self._y = int(value)
 
     def get_coordinates(self):
         return self.x, self.y
@@ -92,7 +102,7 @@ class Primitive:
 
 
 class Circle(Primitive):
-    def __init__(self, center: Point = Point(15.0, 15.0), radius: float = 5.0):
+    def __init__(self, center: Point = Point(15, 15), radius: int = 5):
         self.center = center
         self.radius = radius
 
@@ -112,7 +122,7 @@ class Circle(Primitive):
 
     @radius.setter
     def radius(self, new_radius):
-        self._radius = float(new_radius)
+        self._radius = int(new_radius)
 
     def draw(self, color: Color = Color()):
         print(f'Drawing Circle({color.get_hex_represent()}): '
@@ -121,9 +131,9 @@ class Circle(Primitive):
 
 class Triangle(Primitive):
     def __init__(self,
-                 a: Point = Point(5.0, 5.0),
-                 b: Point = Point(10.0, 10.0),
-                 c: Point = Point(5.0, 10.0)
+                 a: Point = Point(5, 5),
+                 b: Point = Point(10, 10),
+                 c: Point = Point(5, 10)
                  ):
         self.a = a
         self.b = b
@@ -165,7 +175,7 @@ class Triangle(Primitive):
 
 
 class Rectangle(Primitive):
-    def __init__(self, a: Point = Point(20.0, 20.0), b: Point = Point(30.0, 30.0)):
+    def __init__(self, a: Point = Point(20, 20), b: Point = Point(30, 30)):
         self.a = a
         self.b = b
 
