@@ -122,6 +122,11 @@ class Circle(Primitive):
 
     @radius.setter
     def radius(self, new_radius):
+        if not isinstance(new_radius, int):
+            raise TypeError(f'A circle\'s radius must be integer: {type(new_radius)}')
+        new_radius = int(new_radius)
+        if new_radius < 0:
+            raise ValueError(f'A Circle\'s radius must be greater than or equal to zero: x = {new_radius}')
         self._radius = int(new_radius)
 
     def draw(self, color: Color = Color()):
