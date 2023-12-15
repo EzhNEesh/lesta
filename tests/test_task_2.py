@@ -55,41 +55,42 @@ class TestColor:
 class TestPoint:
     def test_point_empty(self):
         point = Point()
-        assert (point.x, point.y) == (0.0, 0.0)
-        point = Point(x=1.0)
-        assert (point.x, point.y) == (1.0, 0.0)
+        assert (point.x, point.y) == (0, 0)
+        point = Point(x=1)
+        assert (point.x, point.y) == (1, 0)
         point = Point(y=1)
-        assert (point.x, point.y) == (0.0, 1.0)
+        assert (point.x, point.y) == (0, 1)
 
     @pytest.mark.parametrize(
         'x, y, expectation',
         [
-            (1, 1, does_not_raise()),
-            (1.5, 1.5, does_not_raise()),
-            (-100, -100, does_not_raise()),
-            ('1', 1, does_not_raise()),
-            (1, '1', does_not_raise()),
-            ('1', '1', does_not_raise()),
+            (0, 0, does_not_raise()),
+            ('1', 1, pytest.raises(TypeError)),
+            (1, '1', pytest.raises(TypeError)),
+            ('1', '1', pytest.raises(TypeError)),
+            (1.5, 1, pytest.raises(TypeError)),
+            (1, 1.5, pytest.raises(TypeError)),
+            (-1, -1, pytest.raises(ValueError)),
             (None, 1, pytest.raises(TypeError)),
             (1, None, pytest.raises(TypeError)),
-            ('a', 1, pytest.raises(ValueError)),
-            (1, 'a', pytest.raises(ValueError))
+            ('a', 1, pytest.raises(TypeError)),
+            (1, 'a', pytest.raises(TypeError))
         ]
     )
     def test_point_not_empty(self, x, y, expectation):
         with expectation:
             point = Point(x, y)
-            assert (point.x, point.y) == (float(x), float(y))
+            assert (point.x, point.y) == (int(x), int(y))
 
 
 class TestPrimitives:
     def test_circle_empty(self):
         circle = Circle()
-        assert (circle.center.get_coordinates(), circle.radius) == ((15, 15), 5.)
+        assert (circle.center.get_coordinates(), circle.radius) == ((15, 15), 5)
         circle = Circle(center=Point(1, 1))
-        assert (circle.center.get_coordinates(), circle.radius) == ((1., 1.), 5.)
+        assert (circle.center.get_coordinates(), circle.radius) == ((1, 1), 5)
         circle = Circle(radius=10)
-        assert (circle.center.get_coordinates(), circle.radius) == ((15., 15.), 10.)
+        assert (circle.center.get_coordinates(), circle.radius) == ((15, 15), 10)
 
     @pytest.mark.parametrize(
         ('center', 'radius', 'expectation'),
@@ -111,28 +112,28 @@ class TestPrimitives:
         color = Color(0, 100, 200)
         circle.draw(color)
         out, err = capfd.readouterr()
-        assert out == 'Drawing Circle(#0064C8): (10.0, 10.0) with radius 5.0\n'
+        assert out == 'Drawing Circle(#0064C8): (10, 10) with radius 5\n'
 
     def test_triangle_empty(self):
         triangle = Triangle()
         assert (
                 (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
-                ((5.0, 5.0), (10.0, 10.0), (5.0, 10.0))
+                ((5, 5), (10, 10), (5, 10))
         )
-        triangle = Triangle(a=Point(20.5, 20.5))
+        triangle = Triangle(a=Point(20, 20))
         assert (
                 (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
-                ((20.5, 20.5), (10.0, 10.0), (5.0, 10.0))
+                ((20, 20), (10, 10), (5, 10))
         )
-        triangle = Triangle(b=Point(20.5, 20.5))
+        triangle = Triangle(b=Point(20, 20))
         assert (
                 (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
-                ((5., 5.), (20.5, 20.5), (5.0, 10.0))
+                ((5, 5), (20, 20), (5, 10))
         )
-        triangle = Triangle(c=Point(20.5, 20.5))
+        triangle = Triangle(c=Point(20, 20))
         assert (
                 (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
-                ((5., 5.), (10., 10.), (20.5, 20.5))
+                ((5, 5), (10, 10), (20, 20))
         )
 
     @pytest.mark.parametrize(
@@ -157,23 +158,23 @@ class TestPrimitives:
         color = Color(200, 0, 100)
         triangle.draw(color)
         out, err = capfd.readouterr()
-        assert out == 'Drawing Triangle(#C80064) with points (10.0, 10.0), (20.0, 20.0), (10.0, 20.0)\n'
+        assert out == 'Drawing Triangle(#C80064) with points (10, 10), (20, 20), (10, 20)\n'
 
     def test_rectangle_empty(self):
         rectangle = Rectangle()
         assert (
                 (rectangle.a.get_coordinates(), rectangle.b.get_coordinates()) ==
-                ((20.0, 20.0), (30.0, 30.0))
+                ((20, 20), (30, 30))
         )
-        rectangle = Rectangle(a=Point(10.5, 10.5))
+        rectangle = Rectangle(a=Point(10, 10))
         assert (
                 (rectangle.a.get_coordinates(), rectangle.b.get_coordinates()) ==
-                ((10.5, 10.5), (30.0, 30.0))
+                ((10, 10), (30, 30))
         )
-        rectangle = Rectangle(b=Point(40.5, 40.5))
+        rectangle = Rectangle(b=Point(40, 40))
         assert (
                 (rectangle.a.get_coordinates(), rectangle.b.get_coordinates()) ==
-                ((20., 20.), (40.5, 40.5))
+                ((20, 20), (40, 40))
         )
 
     @pytest.mark.parametrize(
@@ -197,7 +198,7 @@ class TestPrimitives:
         color = Color(100, 200, 0)
         rectangle.draw(color)
         out, err = capfd.readouterr()
-        assert out == 'Drawing Rectangle(#64C800) with corner points (10.0, 10.0) and (20.0, 20.0)\n'
+        assert out == 'Drawing Rectangle(#64C800) with corner points (10, 10) and (20, 20)\n'
 
 
 class TestEngine2D:
@@ -248,7 +249,7 @@ class TestEngine2D:
 
         engine.draw()
         out, err = capfd.readouterr()
-        output_expect = ('Drawing Circle(#000000): (15.0, 15.0) with radius 5.0\n' +
-                         'Drawing Triangle(#969696) with points (5.0, 5.0), (10.0, 10.0), (5.0, 10.0)\n' +
-                         'Drawing Rectangle(#FFFFFF) with corner points (20.0, 20.0) and (30.0, 30.0)\n')
+        output_expect = ('Drawing Circle(#000000): (15, 15) with radius 5\n' +
+                         'Drawing Triangle(#969696) with points (5, 5), (10, 10), (5, 10)\n' +
+                         'Drawing Rectangle(#FFFFFF) with corner points (20, 20) and (30, 30)\n')
         assert out == output_expect
