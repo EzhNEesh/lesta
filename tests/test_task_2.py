@@ -113,7 +113,6 @@ class TestPrimitives:
         out, err = capfd.readouterr()
         assert out == 'Drawing Circle(#0064C8): (10.0, 10.0) with radius 5.0\n'
 
-
     def test_triangle_empty(self):
         triangle = Triangle()
         assert (
@@ -152,6 +151,13 @@ class TestPrimitives:
                     (triangle.a.get_coordinates(), triangle.b.get_coordinates(), triangle.c.get_coordinates()) ==
                     (a.get_coordinates(), b.get_coordinates(), c.get_coordinates())
             )
+
+    def test_triangle_draw(self, capfd):
+        triangle = Triangle(Point(10, 10), Point(20, 20), Point(10, 20))
+        color = Color(200, 0, 100)
+        triangle.draw(color)
+        out, err = capfd.readouterr()
+        assert out == 'Drawing Triangle(#C80064) with points (10.0, 10.0), (20.0, 20.0), (10.0, 20.0)\n'
 
     def test_rectangle_empty(self):
         rectangle = Rectangle()
