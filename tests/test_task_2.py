@@ -106,6 +106,14 @@ class TestPrimitives:
             assert (circle.center.get_coordinates()) == (center.get_coordinates())
             assert circle.radius == float(radius)
 
+    def test_circle_draw(self, capfd):
+        circle = Circle(Point(10, 10), 5)
+        color = Color(0, 100, 200)
+        circle.draw(color)
+        out, err = capfd.readouterr()
+        assert out == 'Drawing Circle(#0064C8): (10.0, 10.0) with radius 5.0\n'
+
+
     def test_triangle_empty(self):
         triangle = Triangle()
         assert (
